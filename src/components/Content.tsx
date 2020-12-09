@@ -1,3 +1,8 @@
+import React from "react";
+import { Section } from "@/components/section";
+import state from "@/components/state";
+import { useInView } from "react-intersection-observer";
+
 const HTMLContent = ({
   domContent,
   children,
@@ -20,8 +25,8 @@ const HTMLContent = ({
           <Model url={modelPath} />
         </mesh>
         <Html fullscreen portal={domContent}>
-          <div ref={refItem} className='container'>
-            <h1 className='title'>{children}</h1>
+          <div ref={refItem} className="container">
+            <h1 className="title">{children}</h1>
           </div>
         </Html>
       </group>

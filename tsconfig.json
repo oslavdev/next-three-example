@@ -1,13 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "es2015",
-      "es2016"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "es2015", "es2016"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -27,13 +21,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "*/index.d.ts", "__tests__/pages/recipes.js", "__tests__/pages/recipes/[id].js"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*/index.d.ts"],
+  "exclude": ["node_modules"]
 }
