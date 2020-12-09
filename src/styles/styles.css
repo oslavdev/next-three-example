@@ -1,0 +1,15 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+body {
+  background: "red";
+}
+
+#__next-prerender-indicator {
+  display: none;
+}
