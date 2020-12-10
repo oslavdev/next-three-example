@@ -7,7 +7,7 @@ import Model from "@/components/Model";
 const App = () => {
   return (
     <>
-      <Canvas colorManagement camera={{ position: [0, 0, 300], fov: 70 }}>
+      <Canvas colorManagement camera={{ position: [0, 0, 300] }}>
         <Lights />
         <Model />
       </Canvas>

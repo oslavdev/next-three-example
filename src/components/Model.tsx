@@ -5,23 +5,46 @@ import { Html } from "drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = () => {
-  const ref = useRef();
+  /* Refs */
+  const group = useRef();
+  const actions = useRef();
+
+  /* State */
   const [model, setModel] = useState(null);
+  const [animation, setAnimation] = useState(null);
+
+  /* Mixer */
+  const [mixer] = useState(() => new THREE.AnimationMixer());
+
   /* Load model */
   useEffect(() => {
     const loader = new GLTFLoader();
-    loader.load("scene.gltf", (gltf) => {
-      setModel(gltf);
+    loader.load("scene.gltf", async (gltf) => {
+      const nodes = await gltf.parser.getDependencies("node");
+      const animations = await gltf.parser.getDependencies("animation");
+      setModel(nodes[0]);
+      setAnimation(animations);
     });
   }, []);
 
-  useFrame(() => (model ? (ref.current.rotation.y += 0.01) : {}));
+  /* Set animation */
+  useEffect(() => {
+    if (animation) {
+      actions.current = { idle: mixer.clipAction(animation[0], group.current) };
+      actions.current.idle.play();
+      return () => animation.forEach((clip) => mixer.uncacheClip(clip));
+    }
+  }, [animation]);
+
+  /* Frames */
+  useFrame((state, delta) => mixer.update(delta));
+  useFrame(() => (group.current ? (group.current.rotation.y += 0.01) : {}));
 
   return (
     <>
       {model ? (
-        <group position={[0, 0, 0]} dispose={null}>
-          <primitive ref={ref} name="Object_0" object={model.scene} />
+        <group ref={group} position={[0, -150, 0]} dispose={null}>
+          <primitive ref={group} name="Object_0" object={model} />
         </group>
       ) : (
         <Html>Loading...</Html>
