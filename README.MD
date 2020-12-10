@@ -1,8 +1,6 @@
 # Next.js + Three.js load GLTF models
 
-\_\_
-
-![Alt text](readme/three_in_next.gif?raw=true "Title"))
+![Alt text](readme/three_in_next.gif?raw=true "Title")
 
 Example of how to upload GLTF models in Next.js application. For article on Medium.
 
