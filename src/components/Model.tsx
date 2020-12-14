@@ -3,18 +3,37 @@ import { useFrame } from "react-three-fiber";
 import * as THREE from "three";
 import { Html } from "drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Object3D } from "three/src/core/Object3D"; //Object3D types
+import { AnimationClip } from "three/src/animation/AnimationClip"; //Animation types
+
+interface group {
+  current: {
+    rotation: {
+      x: number;
+      y: number;
+    };
+  };
+}
+
+interface actions {
+  current: {
+    idle: {
+      play: () => void;
+    };
+  };
+}
 
 const Model = () => {
   /* Refs */
-  const group = useRef();
-  const actions = useRef();
+  const group: group = useRef();
+  const actions: actions = useRef();
 
   /* State */
-  const [model, setModel] = useState(null);
-  const [animation, setAnimation] = useState(null);
+  const [model, setModel] = useState<Object3D | null>(null);
+  const [animation, setAnimation] = useState<AnimationClip[] | null>(null);
 
   /* Mixer */
-  const [mixer] = useState(() => new THREE.AnimationMixer());
+  const [mixer] = useState(() => new THREE.AnimationMixer(null));
 
   /* Load model */
   useEffect(() => {
@@ -29,16 +48,22 @@ const Model = () => {
 
   /* Set animation */
   useEffect(() => {
-    if (animation) {
-      actions.current = { idle: mixer.clipAction(animation[0], group.current) };
+    if (animation && typeof group.current != "undefined") {
+      actions.current = {
+        idle: mixer.clipAction(animation[0], group.current as Object3D),
+      };
       actions.current.idle.play();
       return () => animation.forEach((clip) => mixer.uncacheClip(clip));
     }
   }, [animation]);
 
-  /* Frames */
-  useFrame((state, delta) => mixer.update(delta));
-  useFrame(() => (group.current ? (group.current.rotation.y += 0.01) : {}));
+  /* Animation update */
+  useFrame((_, delta) => mixer.update(delta));
+  /* Rotation */
+  useFrame(() => {
+    if (typeof group.current != "undefined")
+      return (group.current.rotation.y += 0.01);
+  });
 
   return (
     <>
